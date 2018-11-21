@@ -1,41 +1,18 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-
+import { WebcamService } from '../../services/webcam.service';
 declare var WebCam: any;
 
 @Component({
   selector: 'app-webcam',
   templateUrl: './webcam.component.html',
-  styleUrls: ['./webcam.component.scss']
+  styleUrls: ['./webcam.component.scss'],
+  providers: [
+    WebcamService
+  ]
 })
 
 export class WebcamComponent implements AfterViewInit {
-  public cameras: object = [
-    {
-      'name': 'New Delhi',
-      'id': 'delhi',
-      'source': 'http://runningios.com/screamingbox/new-delhi.jpg'
-    },
-    {
-      'name': 'New York',
-      'id': 'newyork',
-      'source': 'http://runningios.com/screamingbox/new-york.jpg'
-    },
-    {
-      'name': 'Toronto',
-      'id': 'toronto',
-      'source': 'http://runningios.com/screamingbox/toronto.jpg'
-    },
-    {
-      'name': 'Montreal',
-      'id': 'montreal',
-      'source': 'http://runningios.com/screamingbox/montreal.jpg'
-    },
-    {
-      'name': 'Paris',
-      'id': 'paris',
-      'source': 'http://runningios.com/screamingbox/paris.jpg'
-    }
-  ];
+  public cameras: any = [];
 
   @ViewChild('cameraContainer') cameraContainer;
   private controlEnabled: boolean;
@@ -46,7 +23,7 @@ export class WebcamComponent implements AfterViewInit {
   private controlPanel: string;
   private cameraList: string;
 
-  constructor() {
+  constructor(private webcamService: WebcamService) {
     this.controlEnabled = false;
     this.btnCameras = 'btn-secondary';
     this.btnControl = 'btn-outline-secondary';
@@ -55,9 +32,21 @@ export class WebcamComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.cameraView = WebCam.getCameraNode();
-    this.cameraContainerDiv = this.cameraContainer.nativeElement;
-    this.cameraContainerDiv.appendChild(this.cameraView);
+    this.webcamService.getCameraList()
+    .subscribe(
+      (success) => {
+        this.cameraView = WebCam.getCameraNode();
+        if (success.length > 0 ) {
+          this.cameras = success;
+          this.cameraView.childNodes[0].src = this.cameras[0].source;
+        }
+        this.cameraContainerDiv = this.cameraContainer.nativeElement;
+        this.cameraContainerDiv.appendChild(this.cameraView);
+      },
+      error => {
+        alert(error);
+      }
+    );
   }
 
   switchRightPanel(isControlPanel) {
@@ -69,26 +58,22 @@ export class WebcamComponent implements AfterViewInit {
 
   mouseDownEvent(event) {
     if (!this.controlEnabled) {
-      console.log('start: ', event);
       this.controlEnabled = true;
     }
   }
   mouseMoveEvent(event) {
     if (this.controlEnabled) {
-      console.log('move: ', event.movementX, event.movementY);
       WebCam.move(event.movementX * 20, -(event.movementY * 20));
     }
   }
   mouseUpEvent(event) {
     if (this.controlEnabled) {
-      console.log('end:', event);
       this.controlEnabled = false;
     }
   }
 
   mouseLeaveEvent(event) {
     if (this.controlEnabled) {
-      console.log('leave:', event);
       this.controlEnabled = false;
     }
   }
