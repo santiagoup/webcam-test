@@ -1,0 +1,11 @@
+.webcam {
+  &__container {
+    height: auto;
+  }
+  &__circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 100px;
+    cursor: move;
+  }
+}

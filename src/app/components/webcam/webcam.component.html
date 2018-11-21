@@ -1,3 +1,21 @@
-<p>
-  webcam works!
-</p>
+<div class="webcam__container container bg-white d-flex justify-content-center align-items-center flex-wrap py-5 mt-5">
+  
+  <div #cameraContainer class="col-12 col-lg-8 d-flex justify-content-center align-items-center my-3">
+  </div>
+
+  <div class="col-12 col-lg-4 my-3">
+    <div class="col-12 d-flex justify-content-around align-items-center">
+      <button type="button" class="btn text-uppercase {{btnControl}}" (click)="switchRightPanel(true)">Control</button>
+      <button type="button" class="btn text-uppercase {{btnCameras}}" (click)="switchRightPanel(false)">Cameras</button>
+    </div>
+
+    <div class="col-12 mt-4 {{controlPanel}} flex-column align-items-center">
+      <h5 class="text-center">Click in circle & Drag</h5>
+      <div class="webcam__circle border mt-5" (mousedown)="mouseDownEvent($event)" (mousemove)="mouseMoveEvent($event)" (mouseup)="mouseUpEvent($event)" (mouseleave)="mouseLeaveEvent($event)"></div>
+    </div>
+    <div class="col-12 mt-4 {{cameraList}} flex-column align-items-center">
+      <button type="button" class="btn btn-light text-capitlaize border my-2 w-100" *ngFor="let camera of cameras" (click)="replaceCameraSource(camera)">{{camera.name}}</button>
+    </div>
+  </div>
+
+</div>

@@ -29,7 +29,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/webcam.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -85,7 +87,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/js/webcam.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"
